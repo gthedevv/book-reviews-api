@@ -35,6 +35,13 @@ const BookSchema = new mongoose.Schema({
   }
 }, {timestamps: true});
 
-const Book = mongoose.model('books', BookSchema)
+BookSchema.methods.bookPosted = function() {
+  return {
+    post: true,
+    bookId: this._id,
+  };
+};
 
-module.exports = { Book }
+const Book = mongoose.model('books', BookSchema);
+
+module.exports = { Book };
