@@ -2,7 +2,7 @@
 require('dotenv').config();
 const { SECRET, EXPIRY } = require('../config').get(process.env.NODE_ENV);
 const mongoose = require('mongoose');
-const bcrypt = require(bcryptjs);
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken'); 
 
 mongoose.Promise = global.Promise;
