@@ -61,10 +61,6 @@ router.post('/book', (req, res) => {
       console.error(err);
       res.status(500).json({message: 'Internal server error'})
     });
-
-  
-
-  const book = new Book()
   });
 
 module.exports = router;
