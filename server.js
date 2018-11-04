@@ -2,17 +2,25 @@
 require('dotenv').config();
 const { DATABASE, PORT } = require('./config').get(process.env.NODE_ENV);
 const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const mongoose = require('mongoose');
+
+const users = require('./routes/users');
+const books = require('./routes/books')
 
 const app = express(); 
 
 mongoose.Promise = global.Promise;
 
+// middleware
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+// handle routes
+app.use('/users/api', users);
+app.use('/books/api', books);
 
 // handle server
 let server;
