@@ -1,0 +1,23 @@
+{
+  "name": "book-review-api",
+  "version": "1.0.0",
+  "description": "Node API for book-review. A simple web application to review books.",
+  "main": "server.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "concurrently": "^4.0.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.3.0",
+    "moment-js": "^1.1.15",
+    "mongoose": "^5.3.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Gerard Fajardo",
+  "license": "ISC"
+}
