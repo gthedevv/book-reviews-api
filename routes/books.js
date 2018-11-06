@@ -15,10 +15,7 @@ router.get('/book', (req, res) => {
     })
 });
 
-router.get('/books', (req, res) => { 
-  let skip = parseInt(req.query.skip);
-  let limit = parseInt(req.query.limit);
-  let order = req.query.order;
+router.get('/', (req, res) => { 
 
   Book.find()
     .skip(skip)
