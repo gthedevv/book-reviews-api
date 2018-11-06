@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { Book } = require('../models/books'); 
+const  Book  = require('../models/books'); 
 
 router.get('/book', (req, res) => {
     let id = req.query.id;
