@@ -44,4 +44,4 @@ BookSchema.methods.bookPosted = function() {
 
 const Book = mongoose.model('books', BookSchema);
 
-module.exports = { Book };
+module.exports = Book ;
