@@ -19,8 +19,8 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // handle routes
-app.use('/users/api', users);
-app.use('/books/api', books);
+app.use('/users', users);
+app.use('/books', books);
 
 // handle server
 let server;
