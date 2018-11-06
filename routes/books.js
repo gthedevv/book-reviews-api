@@ -39,14 +39,20 @@ router.post('/book', (req, res) => {
   const { name, author, review, pages, rating, price, reviewerId } = req.body
 
   const requiredFields = ['name', 'author', 'review', 'pages', 'rating', 'price', 'reviewerId']
-  const missingField = requiredFields.find(field => !(field in req.body))
+  const missingFields = [];
+  requiredFields.forEach(field => {
+    if(!(field in req.body)) {
+      missingFields.push(field);
+    }
+  }); 
 
-  if(missingField) {
+  const message = `You are missing ${missingFields.join(', ')}`;
+
+  if(!(missingFields === undefined || missingFields == 0)) {
     return res.status(422).send({
       code: 422,
       reason: 'ValidationError',
-      message: 'Missing field',
-      location: missingField
+      message
     });
   }
 
@@ -87,7 +93,6 @@ router.post('/book', (req, res) => {
         updated[field] = req.body[field];
       }
     });
-
 
     Book
     .findByIdAndUpdate(req.params.id, updated, { new: true })
