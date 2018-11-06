@@ -24,11 +24,14 @@ router.get('/', (req, res) => {
     .skip(skip)
     .sort({_id:order})
     .limit(limit)
-    .exec((err, docs) => {
+    .then((err, docs) => {
       if(err) {
         return res.status(400).send(err);
       }
       res.send(docs)
+    })
+    .catch(err => {
+      return res.status(500).send(err);
     })
 });
 
@@ -56,18 +59,24 @@ router.post('/book', (req, res) => {
     price,
     reviewerId
   })
-  .then(doc => res.status(201).send(doc.bookPosted()))
+  .then(doc => {
+    return res.status(201).send(doc.bookPosted())
+  })
   .catch(err => {
     console.error(err);
-    res.status(500).send({message: 'Internal server error'})
+    return res.status(500).send(err);
   });
 });
 
   router.put('/book/:id', (req, res) => {
-    if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-      res.status(400).send({
+    if (!(req.body.id)) {
+      return res.status(400).send({
+        error: 'Request body id missing'
+      });
+    } else if (!(req.params.id === req.body.id)) {
+      return res.status(400).send({
         error: 'Request path id and request body id values must match'
-      })
+      });
     }
 
     const updated = {}
@@ -82,8 +91,12 @@ router.post('/book', (req, res) => {
 
     Book
     .findByIdAndUpdate(req.params.id, updated, { new: true })
-    .then(updatedBook => res.status(200).send({success:true, updatedBook}))
-    .catch(err => res.status(500).send({ message: 'Something went wrong' }));
+    .then(updatedBook =>{
+      return res.status(200).send({success:true, updatedBook}) 
+    })
+    .catch(err => {
+      return res.status(500).send(err)
+    });
   });
 
   router.delete('/book/:id', (req, res) => {
@@ -93,8 +106,7 @@ router.post('/book', (req, res) => {
         res.status(204).send({ message: 'success' });
       })
       .catch(err => {
-        console.error(err);
-        res.status(500).send({ error: 'something went terribly wrong' });
+        return res.status(500).send(err);
       });
   });
 
