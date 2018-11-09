@@ -41,6 +41,9 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
+UserSchema.virtual('name').get(function() {
+    return `${this.firstname} ${this.lastname}`.trim();
+  });
 UserSchema.statics.findUserByEmail = function(email) {
     return this.findOne({
         'email': email
