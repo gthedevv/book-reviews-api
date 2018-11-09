@@ -44,6 +44,19 @@ const UserSchema = new mongoose.Schema({
 UserSchema.virtual('name').get(function() {
     return `${this.firstname} ${this.lastname}`.trim();
   });
+
+UserSchema.methods.serialize = function() {
+    return {
+        success: true,
+        user: { 
+            name: this.name,
+            email: this.email,
+            role: this.role,
+            created_date: this.created_date
+        }
+    }
+}
+
 UserSchema.statics.findUserByEmail = function(email) {
     return this.findOne({
         'email': email
