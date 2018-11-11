@@ -4,6 +4,19 @@ const router = express.Router();
 
 const  User  = require('../models/users'); 
 
+router.get('/', (req, res) => {
+    User
+        .find()
+        .limit(100)
+        .then(users => {
+            return res.status(200).send(users);
+        })
+        .catch(err => {
+            return res.status(400).send(err);
+        })
+
+});
+
 router.post('/register', async (req, res) => {
 
     const { firstname, lastname, email, password } = req.body 
