@@ -67,6 +67,10 @@ UserSchema.statics.hashPassword = function(password) {
     return bcrypt.hash(password, 10);
 }
 
+UserSchema.methods.checkPassword = function(password, userPassword) {
+    return bcrypt.compare(password, userPassword);
+};
+
 UserSchema.methods.createAuthToken = function(payload) {
   return jwt.sign({payload}, SECRET, {
         subject: payload.email,
