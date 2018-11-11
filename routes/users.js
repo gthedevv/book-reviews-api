@@ -8,7 +8,7 @@ router.post('/register', async (req, res) => {
 
     const { firstname, lastname, email, password } = req.body 
 
-    const requiredFields = ["firstname", "lastname", "email", "password"]
+    const requiredFields = ['firstname', 'lastname', 'email', 'password']
     const missingFields = [];
     requiredFields.forEach(field => {
     if(!(field in req.body)) {
