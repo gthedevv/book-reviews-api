@@ -73,7 +73,10 @@ router.post('/login', async (req, res) => {
   try {
       const user = await User.findUserByEmail(email);
       if(!user) {
-          return res.status(404).send({email: 'User not found'});
+          return res.status(404).send({
+              success: false,
+              email: 'User not found'
+            });
       }
 
       const verified = await user.checkPassword(password, user.password);
