@@ -17,6 +17,24 @@ router.get('/', (req, res) => {
 
 });
 
+router.get('/getReviewer/:id', (req, res) => {
+    User.findById(req.params.id)
+    .then(reviewer => {
+        const { firstname, lastname } = reviewer;
+        return res.status(200).send({
+            firstname,
+            lastname
+        });
+    })
+    .catch(err => {
+        return res.status(400).send(err);
+    })
+});
+
+router.get('/user_posts', (req, res) => {
+    
+});
+
 router.post('/register', async (req, res) => {
 
     const { firstname, lastname, email, password } = req.body 
