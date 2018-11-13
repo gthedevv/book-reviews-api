@@ -33,6 +33,10 @@ app.use(function (req, res, next) {
   }
   next();
 });
+
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+
 // handle routes
 app.use('/users', users);
 app.use('/books', books);
