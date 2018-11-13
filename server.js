@@ -8,7 +8,9 @@ const morgan = require('morgan');
 const passport = require('passport');
 
 const users = require('./routes/users');
-const books = require('./routes/books')
+const books = require('./routes/books');
+const auth = require('./routes/auth');
+const { localStrategy, jwtStrategy } = require('./middleware/stratagies');
 
 const app = express(); 
 
