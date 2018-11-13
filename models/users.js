@@ -67,8 +67,8 @@ UserSchema.statics.hashPassword = function(password) {
     return bcrypt.hash(password, 10);
 }
 
-UserSchema.methods.checkPassword = function(password, userPassword) {
-    return bcrypt.compare(password, userPassword);
+UserSchema.methods.validatePassword = function(password) {
+    return bcrypt.compare(password, this.password);
 };
 
 UserSchema.methods.createAuthToken = function(payload) {
