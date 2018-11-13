@@ -4,6 +4,7 @@ const router = express.Router();
 
 const  User  = require('../models/users'); 
 
+// Serialize user so pw is not sent to client
 router.get('/', (req, res) => {
     User
         .find()
