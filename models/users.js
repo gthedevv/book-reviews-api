@@ -23,7 +23,6 @@ const UserSchema = new mongoose.Schema({
         required: true,
         trim: true,
         unique: true
-
     },
     password: {
         type: String,
@@ -71,13 +70,6 @@ UserSchema.methods.validatePassword = function(password) {
     return bcrypt.compare(password, this.password);
 };
 
-UserSchema.methods.createAuthToken = function(payload) {
-  return jwt.sign({payload}, SECRET, {
-        subject: payload.email,
-        expiresIn: EXPIRY,
-        algorithm: 'HS256'
-      });  
-}
 
 const User = mongoose.model('users', UserSchema); 
 
