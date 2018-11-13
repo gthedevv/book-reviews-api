@@ -19,7 +19,9 @@ mongoose.Promise = global.Promise;
 // middleware
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(cookieParser());
+
+// Logging
+app.use(morgan('common'));
 
 // handle routes
 app.use('/users', users);
