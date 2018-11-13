@@ -8,12 +8,12 @@ const jwt = require('jsonwebtoken');
 mongoose.Promise = global.Promise;
 
 const UserSchema = new mongoose.Schema({
-    firstname: {
+    firstName: {
         type: String,
         required: true,
         maxlength: 50
     },
-    lastname: {
+    lastName: {
       type: String,
       required: true,
       maxlength: 50
@@ -42,7 +42,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.virtual('name').get(function() {
-    return `${this.firstname} ${this.lastname}`.trim();
+    return `${this.firstName} ${this.lastName}`.trim();
   });
 
 UserSchema.methods.serialize = function() {
