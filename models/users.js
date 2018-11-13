@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
       required: true,
       maxlength: 50
     },
-    email: {
+    username: {
         type: String,
         required: true,
         trim: true,
@@ -50,16 +50,16 @@ UserSchema.methods.serialize = function() {
         success: true,
         user: { 
             name: this.name,
-            email: this.email,
+            username: this.username,
             role: this.role,
             created_date: this.created_date
         }
     }
 }
 
-UserSchema.statics.findUserByEmail = function(email) {
+UserSchema.statics.findUserByusername = function(username) {
     return this.findOne({
-        'email': email
+        'username': username
     });
 }
 

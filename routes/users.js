@@ -35,7 +35,7 @@ router.get('/user_posts', (req, res) => {
     
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', (req, res) => {
 
     const { firstname, lastname, email, password } = req.body 
 
