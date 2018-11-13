@@ -56,75 +56,101 @@ router.post('/register', (req, res) => {
     });
     }
 
+    const stringFields = ['username', 'password', 'firstName', 'lastName'];
+    const nonStringField = stringFields.find(
+      field => field in req.body && typeof req.body[field] !== 'string'
+    );
  
-    let user = await User.findUserByEmail(email);
-    if(user) {
-        return res.status(400).send({email: 'Email already exists'});
-    } else {
-        const hash = await User.hashPassword(password);
-        User.create({
-            firstname,
-            lastname,
-            email,
-            password: hash
-        })
-        .then(user => {
-            return res.status(201).send(user.serialize());
-        })
-        .catch(err => {
-            console.log(err);
-            return res.status(500).send(err);
+    if (nonStringField) {
+      return res.status(422).send({
+        code: 422,
+        reason: 'ValidationError',
+        message: 'Incorrect field type: expected string',
+        location: nonStringField
         });
     }  
-});
 
-router.post('/login', async (req, res) => {
+    const explicityTrimmedFields = ['username', 'password'];
+    const nonTrimmedField = explicityTrimmedFields.find(
+      field => req.body[field].trim() !== req.body[field]
+    );
 
-  const { email, password } = req.body;
-
-  const requiredFields = ['email', 'password']
-  const missingFields = [];
-  requiredFields.forEach(field => {
-    if(!(field in req.body)) {
-      missingFields.push(field);
+    if (nonTrimmedField) {
+      return res.status(422).send({
+        code: 422,
+        reason: 'ValidationError',
+        message: 'Cannot start or end with whitespace',
+        location: nonTrimmedField
+      });
     }
-  }); 
 
-  const message = `You are missing ${missingFields.join(', ')}`;
+    const sizedFields = {
+      username: {
+        min: 1
+      },
+      password: {
+        min: 10,
+        max: 72
+    }
+    };
+    const tooSmallField = Object.keys(sizedFields).find(
+      field =>
+        'min' in sizedFields[field] &&
+              req.body[field].trim().length < sizedFields[field].min
+    );
+    const tooLargeField = Object.keys(sizedFields).find(
+      field =>
+        'max' in sizedFields[field] &&
+              req.body[field].trim().length > sizedFields[field].max
+    );
 
-  if(!(missingFields === undefined || missingFields == 0)) {
+    if (tooSmallField || tooLargeField) {
     return res.status(422).send({
       code: 422,
       reason: 'ValidationError',
-      message
+        message: tooSmallField
+          ? `Must be at least ${sizedFields[tooSmallField]
+            .min} characters long`
+          : `Must be at most ${sizedFields[tooLargeField]
+            .max} characters long`,
+        location: tooSmallField || tooLargeField
     });
   }
 
-  try {
-      const user = await User.findUserByEmail(email);
-      if(!user) {
-          return res.status(404).send({
-              success: false,
-              email: 'User not found'
+    firstName = firstName.trim();
+    lastName = lastName.trim();
+  
+    return User.find({username})
+      .count()
+      .then(count => {
+        if (count > 0) {
+          return Promise.reject({
+            code: 422,
+            reason: 'ValidationError',
+            message: 'username already used',
+            location: 'username'
             });
       }
-
-      const verified = await user.checkPassword(password, user.password);
-      if(verified) {
-          const authToken = await user.createAuthToken(user);
-          res.send({
-              success: true,
-              authToken: 'Bearer ' + authToken
-          });
-      } else {
-          return res.status(400).send({
-              success: false, 
-              password: 'Password incorrect' 
+        return User.hashPassword(password);
+      })
+      .then(hash => {
+        return User.create({
+          username,
+          password: hash,
+          firstName,
+          lastName
             });
-      }
-  } catch(error){
-      console.log(error);
+      })
+      .then(user => {
+        return res.status(201).send(user.serialize());
+      })
+      .catch(err => {
+        if (err.reason === 'ValidationError') {
+          return res.status(err.code).send(err);
   }   
+        console.log(err);
+        res.status(500).send(err);
+      });
 });
 
 module.exports = router;
