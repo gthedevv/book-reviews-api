@@ -39,6 +39,19 @@ router.get('/', (req, res) => {
     })
 });
 
+router.get('/user_reviews/:id', jwtAuth, (req, res) => {
+  const { id: reviewerId } = req.params
+  console.log(reviewerId)
+  Book.find({reviewerId})
+    .then(bookReviews => {
+      return res.status(200).send(bookReviews)
+    }) 
+    .catch(err => {
+      console.log(err)
+      return res.sendStatus(404);
+    })
+});
+
 router.post('/book', jwtAuth, (req, res) => {
   const { name, author, review, pages, rating, price, reviewerId } = req.body
 
