@@ -2,28 +2,27 @@
 require('dotenv').config();
 const { SECRET, EXPIRY } = require('../config').get(process.env.NODE_ENV);
 const mongoose = require('mongoose');
-const bcrypt = require(bcryptjs);
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken'); 
 
 mongoose.Promise = global.Promise;
 
 const UserSchema = new mongoose.Schema({
-    firstname: {
+    firstName: {
         type: String,
         required: true,
         maxlength: 50
     },
-    lastname: {
+    lastName: {
       type: String,
       required: true,
       maxlength: 50
     },
-    email: {
+    username: {
         type: String,
         required: true,
         trim: true,
         unique: true
-
     },
     password: {
         type: String,
@@ -41,9 +40,25 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-UserSchema.statics.findUserByEmail = function(email) {
+UserSchema.virtual('name').get(function() {
+    return `${this.firstName} ${this.lastName}`.trim();
+  });
+
+UserSchema.methods.serialize = function() {
+    return {
+        success: true,
+        user: { 
+            name: this.name,
+            username: this.username,
+            role: this.role,
+            created_date: this.created_date
+        }
+    }
+}
+
+UserSchema.statics.findUserByusername = function(username) {
     return this.findOne({
-        'email': email
+        'username': username
     });
 }
 
@@ -51,14 +66,11 @@ UserSchema.statics.hashPassword = function(password) {
     return bcrypt.hash(password, 10);
 }
 
-UserSchema.methods.createAuthToken = function(payload) {
-  return jwt.sign({payload}, SECRET, {
-        subject: payload.email,
-        expiresIn: EXPIRY,
-        algorithm: 'HS256'
-      });  
-}
+UserSchema.methods.validatePassword = function(password) {
+    return bcrypt.compare(password, this.password);
+};
+
 
 const User = mongoose.model('users', UserSchema); 
 
-module.exports = { User } 
+module.exports =  User; 
