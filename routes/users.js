@@ -56,26 +56,26 @@ router.post('/register', (req, res) => {
         message
     });
     }
-
+  
     const stringFields = ['username', 'password', 'firstName', 'lastName'];
     const nonStringField = stringFields.find(
       field => field in req.body && typeof req.body[field] !== 'string'
     );
- 
+  
     if (nonStringField) {
       return res.status(422).send({
         code: 422,
         reason: 'ValidationError',
         message: 'Incorrect field type: expected string',
         location: nonStringField
-        });
-    }  
-
+      });
+    }
+  
     const explicityTrimmedFields = ['username', 'password'];
     const nonTrimmedField = explicityTrimmedFields.find(
       field => req.body[field].trim() !== req.body[field]
     );
-
+  
     if (nonTrimmedField) {
       return res.status(422).send({
         code: 422,
@@ -84,7 +84,7 @@ router.post('/register', (req, res) => {
         location: nonTrimmedField
       });
     }
-
+  
     const sizedFields = {
       username: {
         min: 1
@@ -92,7 +92,7 @@ router.post('/register', (req, res) => {
       password: {
         min: 10,
         max: 72
-    }
+      }
     };
     const tooSmallField = Object.keys(sizedFields).find(
       field =>
@@ -104,19 +104,19 @@ router.post('/register', (req, res) => {
         'max' in sizedFields[field] &&
               req.body[field].trim().length > sizedFields[field].max
     );
-
+  
     if (tooSmallField || tooLargeField) {
-    return res.status(422).send({
-      code: 422,
-      reason: 'ValidationError',
+      return res.status(422).send({
+        code: 422,
+        reason: 'ValidationError',
         message: tooSmallField
           ? `Must be at least ${sizedFields[tooSmallField]
             .min} characters long`
           : `Must be at most ${sizedFields[tooLargeField]
             .max} characters long`,
         location: tooSmallField || tooLargeField
-    });
-  }
+      });
+    }
 
     firstName = firstName.trim();
     lastName = lastName.trim();
@@ -130,8 +130,8 @@ router.post('/register', (req, res) => {
             reason: 'ValidationError',
             message: 'username already used',
             location: 'username'
-            });
-      }
+          });
+        }
         return User.hashPassword(password);
       })
       .then(hash => {
@@ -140,7 +140,7 @@ router.post('/register', (req, res) => {
           password: hash,
           firstName,
           lastName
-            });
+        });
       })
       .then(user => {
         return res.status(201).send(user.serialize());
@@ -148,10 +148,10 @@ router.post('/register', (req, res) => {
       .catch(err => {
         if (err.reason === 'ValidationError') {
           return res.status(err.code).send(err);
-  }   
+        }
         console.log(err);
         res.status(500).send(err);
       });
-});
+  });
 
 module.exports = router;
