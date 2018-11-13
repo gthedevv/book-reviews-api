@@ -1,8 +1,12 @@
 'use strict'
 const express = require('express');
+const passport = require('passport');
+
 const router = express.Router();
 
 const  Book  = require('../models/books'); 
+
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
 router.get('/book', (req, res) => {
     let id = req.query.id;
@@ -35,7 +39,7 @@ router.get('/', (req, res) => {
     })
 });
 
-router.post('/book', (req, res) => {
+router.post('/book', jwtAuth, (req, res) => {
   const { name, author, review, pages, rating, price, reviewerId } = req.body
 
   const requiredFields = ['name', 'author', 'review', 'pages', 'rating', 'price', 'reviewerId']
@@ -74,7 +78,7 @@ router.post('/book', (req, res) => {
   });
 });
 
-  router.put('/book/:id', (req, res) => {
+  router.put('/book/:id', jwtAuth, (req, res) => {
     if (!(req.body.id)) {
       return res.status(400).send({
         error: 'Request body id missing'
@@ -104,7 +108,7 @@ router.post('/book', (req, res) => {
     });
   });
 
-  router.delete('/book/:id', (req, res) => {
+  router.delete('/book/:id', jwtAuth, (req, res) => {
     Book
       .findByIdAndRemove(req.params.id)
       .then(() => {
