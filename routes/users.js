@@ -36,10 +36,9 @@ router.get('/user_posts', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
+    let { firstName, lastName, username, password } = req.body 
 
-    const { firstname, lastname, email, password } = req.body 
-
-    const requiredFields = ['firstname', 'lastname', 'email', 'password']
+    const requiredFields = ['firstName', 'lastName', 'username', 'password']
     const missingFields = [];
     requiredFields.forEach(field => {
     if(!(field in req.body)) {
