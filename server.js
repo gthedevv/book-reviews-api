@@ -4,7 +4,8 @@ const { DATABASE, PORT } = require('./config').get(process.env.NODE_ENV);
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
+const passport = require('passport');
 
 const users = require('./routes/users');
 const books = require('./routes/books')
