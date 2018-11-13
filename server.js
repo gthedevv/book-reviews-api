@@ -38,6 +38,7 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 // handle routes
+app.use('/auth', auth);
 app.use('/users', users);
 app.use('/books', books);
 
