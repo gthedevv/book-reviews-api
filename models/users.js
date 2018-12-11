@@ -1,6 +1,6 @@
 'use strict'
 require('dotenv').config();
-const { SECRET, EXPIRY } = require('../config').get(process.env.NODE_ENV);
+const { SECRET, EXPIRY } = require('../config') 
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken'); 

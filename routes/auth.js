@@ -3,7 +3,7 @@ const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
-const { SECRET, EXPIRY } = require('../config').get(process.env.NODE_ENV);
+const { SECRET, EXPIRY } = require('../config') 
 const router = express.Router();
 
 const createAuthToken = function(user) {
