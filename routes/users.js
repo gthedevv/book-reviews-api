@@ -21,10 +21,11 @@ router.get('/', (req, res) => {
 router.get('/getReviewer/:id', (req, res) => {
     User.findById(req.params.id)
     .then(reviewer => {
-        const { firstname, lastname } = reviewer;
+        console.log(reviewer.firstName);
+        const { firstName, lastName } = reviewer;
         return res.status(200).send({
-            firstname,
-            lastname
+            firstName,
+            lastName
         });
     })
     .catch(err => {
