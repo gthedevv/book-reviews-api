@@ -37,6 +37,10 @@ app.use(function (req, res, next) {
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
+app.get('/', (req,res) => {
+  res.send("Hello");
+})
+
 // handle routes
 app.use('/auth', auth);
 app.use('/users', users);
