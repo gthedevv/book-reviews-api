@@ -1,20 +1,6 @@
-'use strict'
-
-const config = {
-  production: {
-    DATABASE: 'mongodb://admin:qwerty123450@ds151863.mlab.com:51863/my-book-reviews',
-    PORT: process.env.PORT || 5000,
-    SECRET: process.env.JWT_SECRET,
-    EXPIRY: process.env.JWT_EXPIRY || '1d'
-  },
-  default:{
-    DATABASE: 'mongodb://localhost:27017/myBookReviews',
-    PORT: process.env.PORT || 5000,
-    SECRET: process.env.JWT_SECRET,
-    EXPIRY: process.env.JWT_EXPIRY || '1d'
-  }
-}
-
-exports.get = function get(env){
-  return config[env] || config.default
-}
+'use strict';
+exports.DATABASE_URL = process.env.DATABASE_URL || 'mongodb://localhost:27017/myBookReviews';
+exports.TEST_DATABASE_URL = process.env.TEST_DATABASE_URL || 'mongodb://localhost:27017/myBookReviews';
+exports.PORT = process.env.PORT || 5000;
+exports.JWT_SECRET = process.env.JWT_SECRET;
+exports.JWT_EXPIRY = process.env.JWT_EXPIRY || '7d';
