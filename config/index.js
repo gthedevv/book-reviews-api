@@ -2,7 +2,7 @@
 
 const config = {
   production: {
-    DATABASE: 'mongodb://gerard:gfajardo0@ds151863.mlab.com:51863/my-book-reviews',
+    DATABASE: 'mongodb://admin:qwerty123450@ds151863.mlab.com:51863/my-book-reviews',
     PORT: process.env.PORT || 5000,
     SECRET: process.env.JWT_SECRET,
     EXPIRY: process.env.JWT_EXPIRY || '1d'
