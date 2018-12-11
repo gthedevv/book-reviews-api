@@ -8,8 +8,8 @@ const Book = require('../models/books');
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-router.get('/book', (req, res) => {
-  let id = req.query.id;
+router.get('/book/:id', (req, res) => {
+  let id = req.params.id;
 
   Book.findById(id, (err, doc) => {
     if (err) {
